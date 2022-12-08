@@ -2,6 +2,7 @@ package pl.rynski.usermanagement.service;
 
 import java.util.UUID;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,14 @@ public record UserService(UserRepository userRepository, PasswordEncoder passwor
 		return UserDto.builder()
 				.email(savedUser.getEmail())
 				.userId(savedUser.getUserId())
+				.build();
+	}
+	
+	public UserDto getUserDetailsByEmail(String email) {
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+		return UserDto.builder()
+				.email(user.getEmail())
+				.userId(user.getUserId())
 				.build();
 	}
 }
