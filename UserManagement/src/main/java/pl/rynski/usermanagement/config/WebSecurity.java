@@ -32,8 +32,7 @@ public class WebSecurity {
 		.apply(MyCustomDsl.customDsl(userService, environment)).and()
 		.csrf().disable()
 		.authorizeHttpRequests((autz) -> autz
-				.antMatchers("/users/login", "/users", "/users/token/refresh").permitAll()
-				.anyRequest().authenticated())
+				.anyRequest().permitAll()) //TODO hasIpAddress()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		return http.build();
 	}

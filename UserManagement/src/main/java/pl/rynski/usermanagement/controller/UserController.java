@@ -38,7 +38,7 @@ public record UserController(UserService userService, Environment environment) {
 			try {
 				Algorithm algorithm = Algorithm.HMAC256(environment.getProperty("jwt.token.secret"));
 				Algorithm refreshAlgorithm = Algorithm.HMAC256(environment.getProperty("jwt.refresh.secret"));
-				DecodedJWT decodedJWT = JwtTokenGenerator.getDecodedJwt(authorizationHeader, algorithm);
+				DecodedJWT decodedJWT = JwtTokenGenerator.getDecodedJwt(authorizationHeader, refreshAlgorithm);
 				String username = decodedJWT.getSubject();
 				UserDto user = userService.getUserDetailsByEmail(username);
 				return ResponseEntity.status(HttpStatus.CREATED).body(JwtTokenGenerator.generateTokens(user, environment, algorithm, refreshAlgorithm));

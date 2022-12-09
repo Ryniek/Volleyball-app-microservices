@@ -21,7 +21,6 @@ public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurit
     public void configure(HttpSecurity http) throws Exception {
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         http.addFilter(new AuthenticationFilter(authenticationManager, userService, environment));
-        http.addFilterBefore(new AuthorizationFilter(environment), AuthenticationFilter.class);
     }
 
     public static MyCustomDsl customDsl(UserService userService, Environment environment) {
