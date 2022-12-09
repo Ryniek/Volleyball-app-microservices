@@ -64,5 +64,6 @@
 		<module>fraud</module>
 		<module>EurekaServer</module>
 		<module>ApiGateway</module>
+		<module>ConfigServer</module>
 	</modules>
 </project>
