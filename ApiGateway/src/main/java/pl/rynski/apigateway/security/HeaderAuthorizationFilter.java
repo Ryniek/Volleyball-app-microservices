@@ -23,24 +23,24 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
-public class HeaderAuthorizationFilter extends AbstractGatewayFilterFactory<HeaderAuthorizationFilter.Config>{
+public class HeaderAuthorizationFilter extends AbstractGatewayFilterFactory<HeaderAuthorizationFilter.Config> {
 
 	@Autowired
 	private Environment environment;
-	
+
 	public HeaderAuthorizationFilter() {
 		super(Config.class);
 	}
-	
+
 	public static class Config {
-		
+
 	}
-	
+
 	@Override
 	public GatewayFilter apply(Config config) {
 		return (exchange, chain) -> {
 			ServerHttpRequest request = exchange.getRequest();
-			if(!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+			if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
 				return onError(exchange, "Authorization header not passed", HttpStatus.FORBIDDEN);
 			}
 			String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
@@ -49,26 +49,24 @@ public class HeaderAuthorizationFilter extends AbstractGatewayFilterFactory<Head
 				Algorithm algorithm = Algorithm.HMAC256(environment.getProperty("jwt.token.secret"));
 				JWTVerifier verifier = JWT.require(algorithm).build();
 				DecodedJWT decodedJWT = verifier.verify(accessToken);
-				String username = decodedJWT.getSubject();
-				
-//				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-//						username, null, Collections.emptyList());
-//				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//				filterChain.doFilter(request, response);
+				exchange.getRequest().mutate()
+						.header("username", decodedJWT.getSubject())
+						.header("userId", decodedJWT.getClaim("userId").asString()).build();
+
 			} catch (Exception exception) {
-		        return onError(exchange, exception.getMessage(), HttpStatus.FORBIDDEN);
+				return onError(exchange, exception.getMessage(), HttpStatus.FORBIDDEN);
 			}
 			return chain.filter(exchange);
 		};
 	}
-	
+
 	private Mono<Void> onError(ServerWebExchange exchange, String error, HttpStatus httpStatus) {
 		ServerHttpResponse response = exchange.getResponse();
 		response.setStatusCode(httpStatus);
-	    byte[] bytes = error.getBytes(StandardCharsets.UTF_8);
-	    DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
+		byte[] bytes = error.getBytes(StandardCharsets.UTF_8);
+		DataBuffer buffer = exchange.getResponse().bufferFactory().wrap(bytes);
 		response.writeWith(Flux.just(buffer));
-		
+
 		return response.setComplete();
 	}
 

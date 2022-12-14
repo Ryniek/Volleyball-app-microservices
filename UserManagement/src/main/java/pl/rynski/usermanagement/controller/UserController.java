@@ -52,6 +52,7 @@ public record UserController(UserService userService, Environment environment) {
 
 	@GetMapping("/test")
 	public ResponseEntity<?> test() {
+		System.out.println(environment.getProperty("jwt.token.secret"));
 		return ResponseEntity.ok().build();
 	}
 
