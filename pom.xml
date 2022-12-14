@@ -60,10 +60,10 @@
 		</pluginManagement>
 	</build>
 	<modules>
-		<module>customer</module>
-		<module>fraud</module>
 		<module>EurekaServer</module>
 		<module>ApiGateway</module>
 		<module>ConfigServer</module>
+		<module>TeamManagement</module>
+		<module>GameService</module>
 	</modules>
 </project>
