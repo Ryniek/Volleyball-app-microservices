@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameStatistics {
+public class PlayerGameStatistics {
 	private Long gameId;
 	private Integer attacksFinished;
 	private Integer attacksBlocked;

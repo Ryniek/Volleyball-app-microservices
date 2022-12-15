@@ -27,6 +27,7 @@ public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private Long teamId;
 	private String opponentsName;
 	private String videoUrl;
 	private Boolean isStarted;
