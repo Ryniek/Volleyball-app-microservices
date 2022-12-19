@@ -65,5 +65,6 @@
 		<module>ConfigServer</module>
 		<module>TeamManagement</module>
 		<module>GameService</module>
+		<module>PlayerStatisticsService</module>
 	</modules>
 </project>
