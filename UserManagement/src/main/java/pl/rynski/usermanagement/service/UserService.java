@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.rynski.usermanagement.dto.UserDto;
 import pl.rynski.usermanagement.model.User;
 import pl.rynski.usermanagement.repository.UserRepository;
@@ -14,7 +15,6 @@ import pl.rynski.usermanagement.repository.UserRepository;
 public record UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 
 	public UserDto createUser(UserDto userDto) {
-		
 		userDto.setUserId(UUID.randomUUID().toString());
 		User user = User.builder()
 				.email(userDto.getEmail())
