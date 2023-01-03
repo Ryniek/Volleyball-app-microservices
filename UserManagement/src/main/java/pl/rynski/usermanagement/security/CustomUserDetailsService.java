@@ -1,5 +1,6 @@
 package pl.rynski.usermanagement.security;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,4 +20,10 @@ public record CustomUserDetailsService(UserRepository userRepository) implements
 		return UserPrincipal.create(user);
 	}
 
+	public User getLoggedUser() {
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        return userRepository
+                .findByEmail(currentUserEmail)
+                .get(); //TODO Exception handling
+    }
 }
