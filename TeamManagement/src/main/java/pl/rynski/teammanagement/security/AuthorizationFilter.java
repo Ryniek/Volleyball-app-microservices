@@ -1,6 +1,7 @@
 package pl.rynski.teammanagement.security;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -48,13 +48,13 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
         if (token != null) {
-            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(environment.getProperty("jwt.secret")))
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(environment.getProperty("jwt.token.secret")))
                     .build()
                     .verify(token.replace(tokenPrefix, ""));
-            String user = decodedJWT.getSubject();
+            String userId = decodedJWT.getClaim("userId").asString();
 
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, decodedJWT.getClaim("roles").asList(SimpleGrantedAuthority.class));
+            if (userId != null) {
+                return new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
             }
         }
 		return null;

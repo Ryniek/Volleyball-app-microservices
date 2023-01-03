@@ -49,13 +49,12 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
         if (token != null) {
-            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(environment.getProperty("jwt.secret")))
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(environment.getProperty("jwt.token.secret")))
                     .build()
                     .verify(token.replace(tokenPrefix, ""));
-            String user = decodedJWT.getSubject();
-
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+            String userId = decodedJWT.getClaim("userId").asString();
+            if (userId != null) {
+                return new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
             }
         }
 		return null;
