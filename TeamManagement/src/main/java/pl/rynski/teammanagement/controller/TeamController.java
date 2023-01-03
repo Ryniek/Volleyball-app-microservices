@@ -1,7 +1,5 @@
 package pl.rynski.teammanagement.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +22,7 @@ public record TeamController(TeamService teamService) {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createTeam(@RequestBody CreateTeamRequest createTeamRequest, HttpServletRequest request) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest, request));
+	public ResponseEntity<?> createTeam(@RequestBody CreateTeamRequest createTeamRequest) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest));
 	}
 }

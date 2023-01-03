@@ -48,10 +48,7 @@ public class HeaderAuthorizationFilter extends AbstractGatewayFilterFactory<Head
 			try {
 				Algorithm algorithm = Algorithm.HMAC256(environment.getProperty("jwt.token.secret"));
 				JWTVerifier verifier = JWT.require(algorithm).build();
-				DecodedJWT decodedJWT = verifier.verify(accessToken);
-				exchange.getRequest().mutate()
-						.header("username", decodedJWT.getSubject())
-						.header("userId", decodedJWT.getClaim("userId").asString()).build();
+				verifier.verify(accessToken);
 
 			} catch (Exception exception) {
 				return onError(exchange, exception.getMessage(), HttpStatus.FORBIDDEN);

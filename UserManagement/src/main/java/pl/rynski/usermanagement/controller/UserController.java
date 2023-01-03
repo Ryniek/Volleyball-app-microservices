@@ -19,12 +19,13 @@ import pl.rynski.usermanagement.dto.UserDto;
 import pl.rynski.usermanagement.request.CreateUserRequest;
 import pl.rynski.usermanagement.request.LoginRequest;
 import pl.rynski.usermanagement.response.CreateUserResponse;
+import pl.rynski.usermanagement.security.CustomUserDetailsService;
 import pl.rynski.usermanagement.security.JwtTokenGenerator;
 import pl.rynski.usermanagement.service.UserService;
 
 @RestController
 @RequestMapping("/users")
-public record UserController(UserService userService, Environment environment) {
+public record UserController(UserService userService, Environment environment, CustomUserDetailsService customUserDetailsService) {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -51,8 +52,10 @@ public record UserController(UserService userService, Environment environment) {
 	}
 
 	@GetMapping("/test")
-	public ResponseEntity<?> test() {
+	public ResponseEntity<?> test(HttpServletRequest request) {
 		System.out.println(environment.getProperty("jwt.token.secret"));
+		System.out.println(request.getHeader("Authorization"));
+		System.out.println(customUserDetailsService.getLoggedUser().getEmail());
 		return ResponseEntity.ok().build();
 	}
 

@@ -1,4 +1,4 @@
-package pl.rynski.usermanagement.config;
+package pl.rynski.usermanagement.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
-import pl.rynski.usermanagement.security.CustomUserDetailsService;
-import pl.rynski.usermanagement.security.MyCustomDsl;
 import pl.rynski.usermanagement.service.UserService;
 
 @Configuration
@@ -32,7 +30,8 @@ public class WebSecurity {
 		.apply(MyCustomDsl.customDsl(userService, environment)).and()
 		.csrf().disable()
 		.authorizeHttpRequests((autz) -> autz
-				.anyRequest().permitAll()) //TODO hasIpAddress()
+				.antMatchers("/users/test").authenticated()
+				.anyRequest().permitAll())
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		return http.build();
 	}
