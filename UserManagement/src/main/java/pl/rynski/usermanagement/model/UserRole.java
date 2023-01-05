@@ -1,30 +1,28 @@
-package pl.rynski.teammanagement.model;
+package pl.rynski.usermanagement.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "teams")
-public class Team {
+@Table(name = "user_roles")
+public class UserRole {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(name = "name", unique = true, nullable = false, columnDefinition = "VARCHAR(100)")
 	private String name;
-	@Column(name = "creator_id", nullable = false)
-	private Integer creatorId;
+	@ManyToMany(mappedBy = "roles")
+	private List<User> users = new ArrayList<>();;
 }

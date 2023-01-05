@@ -21,9 +21,9 @@ public record CustomUserDetailsService(UserRepository userRepository) implements
 	}
 
 	public User getLoggedUser() {
-        String currentUserId = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        Integer currentUserId = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         return userRepository
-                .findByUserId(currentUserId)
+                .findById(currentUserId)
                 .get(); //TODO Exception handling
     }
 }

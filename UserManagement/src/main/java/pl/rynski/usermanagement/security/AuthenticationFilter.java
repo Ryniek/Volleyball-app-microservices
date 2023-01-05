@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import pl.rynski.usermanagement.dto.UserDto;
 import pl.rynski.usermanagement.request.LoginRequest;
+import pl.rynski.usermanagement.response.UserResponse;
 import pl.rynski.usermanagement.service.UserService;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -41,7 +41,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		try {
 			LoginRequest creds = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 			return authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(creds.email(), creds.password(), new ArrayList<>()));
+					new UsernamePasswordAuthenticationToken(
+							creds.email(), 
+							creds.password(), 
+							new ArrayList<>()
+							));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -56,7 +60,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
 		Algorithm algorithm = Algorithm.HMAC256(environment.getProperty("jwt.token.secret"));
 		Algorithm refreshAlgorithm = Algorithm.HMAC256(environment.getProperty("jwt.refresh.secret"));
-        UserDto user = userService.getUserDetailsByEmail(principal.getUsername());
+        UserResponse user = userService.getUserDetailsByEmail(principal.getUsername());
         res.setContentType("application/json");
         new ObjectMapper().writeValue(
         			res.getOutputStream(), 

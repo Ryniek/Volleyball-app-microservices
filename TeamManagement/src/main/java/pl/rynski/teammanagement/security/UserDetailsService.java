@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public record UserDetailsService() {
 	
-	public String getLoggedUserId() {
-        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+	public Integer getLoggedUserId() {
+        return Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
 }
