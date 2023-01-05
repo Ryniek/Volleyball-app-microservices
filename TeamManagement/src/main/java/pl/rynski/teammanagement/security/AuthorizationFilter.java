@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -51,10 +52,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(environment.getProperty("jwt.token.secret")))
                     .build()
                     .verify(token.replace(tokenPrefix, ""));
-            String userId = decodedJWT.getClaim("userId").asString();
-
+            Integer userId = decodedJWT.getClaim("userId").asInt();
+            
             if (userId != null) {
-                return new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());
+                return new UsernamePasswordAuthenticationToken(userId, null, decodedJWT.getClaim("roles").asList(SimpleGrantedAuthority.class));
             }
         }
 		return null;

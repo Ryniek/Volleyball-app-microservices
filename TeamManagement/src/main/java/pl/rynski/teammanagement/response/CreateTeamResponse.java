@@ -1,7 +1,7 @@
 package pl.rynski.teammanagement.response;
 
 public record CreateTeamResponse(
-		Long id,
+		Integer id,
 		String name,
-		String userId) {
+		Integer userId) {
 }

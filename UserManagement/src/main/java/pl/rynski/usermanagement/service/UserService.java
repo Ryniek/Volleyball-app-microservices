@@ -1,39 +1,42 @@
 package pl.rynski.usermanagement.service;
 
-import java.util.UUID;
+import java.util.List;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
-import pl.rynski.usermanagement.dto.UserDto;
 import pl.rynski.usermanagement.model.User;
+import pl.rynski.usermanagement.model.UserRole;
 import pl.rynski.usermanagement.repository.UserRepository;
+import pl.rynski.usermanagement.repository.UserRoleRepository;
+import pl.rynski.usermanagement.request.CreateUserRequest;
+import pl.rynski.usermanagement.response.UserResponse;
 
 @Service
-public record UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+public record UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
 
-	public UserDto createUser(UserDto userDto) {
-		userDto.setUserId(UUID.randomUUID().toString());
+	public UserResponse createUser(CreateUserRequest userRequest) {
+		UserRole userRole = userRoleRepository.findByName("ROLE_USER").get();
 		User user = User.builder()
-				.email(userDto.getEmail())
-				.userId(userDto.getUserId())
-				.encryptedPassword(passwordEncoder.encode(userDto.getPassword()))
+				.email(userRequest.email())
+				.encryptedPassword(passwordEncoder.encode(userRequest.password()))
+				.roles(List.of(userRole))
 				.build();
-		
 		User savedUser = userRepository.save(user);
-		return UserDto.builder()
+		return UserResponse.builder()
+				.id(savedUser.getId())
 				.email(savedUser.getEmail())
-				.userId(savedUser.getUserId())
+				.roles(savedUser.getRoles().stream().map(role -> role.getName()).toList())
 				.build();
 	}
 	
-	public UserDto getUserDetailsByEmail(String email) {
+	public UserResponse getUserDetailsByEmail(String email) {
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-		return UserDto.builder()
+		return UserResponse.builder()
+				.id(user.getId())
 				.email(user.getEmail())
-				.userId(user.getUserId())
+				.roles(user.getRoles().stream().map(role -> role.getName()).toList())
 				.build();
 	}
 }

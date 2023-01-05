@@ -11,7 +11,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import pl.rynski.usermanagement.dto.UserDto;
+import pl.rynski.usermanagement.response.UserResponse;
 
 public class JwtTokenGenerator {
 	
@@ -21,15 +21,17 @@ public class JwtTokenGenerator {
 		return verifier.verify(refreshToken);
 	}
 
-	public static Map<String, String> generateTokens(UserDto user, Environment environment, Algorithm algorithm, Algorithm refreshAlgorithm) {
+	public static Map<String, String> generateTokens(UserResponse user, Environment environment, Algorithm algorithm, Algorithm refreshAlgorithm) {
 		String access_token = JWT.create()
-                .withSubject(user.getEmail())
-                .withClaim("userId", user.getUserId())
+                .withSubject(user.email())
+                .withClaim("userId", user.id())
+                .withClaim("roles", user.roles())
                 .withExpiresAt(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("jwt.access.token.validity"))))
                 .sign(algorithm);
         String refresh_token = JWT.create()
-                .withSubject(user.getEmail())
-                .withClaim("userId", user.getUserId())
+                .withSubject(user.email())
+                .withClaim("userId", user.id())
+                .withClaim("roles", user.roles())
                 .withExpiresAt(new Date(System.currentTimeMillis() + Long.parseLong(environment.getProperty("jwt.refresh.token.validity"))))
                 .sign(refreshAlgorithm);
         Map<String, String> tokens = new HashMap<>();
