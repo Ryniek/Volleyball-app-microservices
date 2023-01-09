@@ -10,8 +10,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
 
-
-@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurity {
@@ -24,7 +22,7 @@ public class WebSecurity {
 		.apply(MyCustomDsl.customDsl(environment)).and()
 		.csrf().disable()
 		.authorizeHttpRequests((autz) -> autz
-				.anyRequest().authenticated())
+				.anyRequest().permitAll())
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		return http.build();
 	}
