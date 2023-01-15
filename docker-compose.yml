@@ -1,0 +1,41 @@
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    expose: 
+      - 3308
+    ports: 
+      - 3308:3306
+    restart: always
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./mongo-data:/data/db
+    expose:
+      - 27017
+    ports: 
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    restart: always
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    expose:
+      - 9411
+    ports:
+      - 9411:9411
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+
