@@ -1,6 +1,5 @@
 package pl.rynski.usermanagement.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -24,5 +23,5 @@ public class UserRole {
 	@Column(name = "name", unique = true, nullable = false, columnDefinition = "VARCHAR(100)")
 	private String name;
 	@ManyToMany(mappedBy = "roles")
-	private List<User> users = new ArrayList<>();
+	private List<User> users;
 }

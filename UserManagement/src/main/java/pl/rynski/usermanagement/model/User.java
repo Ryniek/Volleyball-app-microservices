@@ -1,6 +1,5 @@
 package pl.rynski.usermanagement.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -33,6 +32,16 @@ public class User {
 	private String email;
 	@Column(name = "encrypted_password", nullable = false)
 	private String encryptedPassword;
+	@Column(name = "first_name", nullable = false, columnDefinition = "VARCHAR(50)")
+	private String firstName;
+	@Column(name = "last_name", nullable = false, columnDefinition = "VARCHAR(50)")
+	private String lastName;
+	@Column(name = "height")
+	private Integer height;
+	@Column(name = "attack_jump")
+	private Integer attackJump;
+	@Column(name = "block_jump")
+	private Integer blockJump;
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( 
             name = "users_roles", 
@@ -40,5 +49,5 @@ public class User {
               name = "user_id", referencedColumnName = "id"), 
             inverseJoinColumns = @JoinColumn(
               name = "role_id", referencedColumnName = "id")) 
-	private List<UserRole> roles = new ArrayList<>();
+	private List<UserRole> roles;
 }

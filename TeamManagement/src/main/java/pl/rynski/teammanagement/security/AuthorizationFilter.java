@@ -20,7 +20,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
-	private Environment environment;
+	private final Environment environment;
 	private final String headerString = "Authorization";
     private final String tokenPrefix = "Bearer ";
 

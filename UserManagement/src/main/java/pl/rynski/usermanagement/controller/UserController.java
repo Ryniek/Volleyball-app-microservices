@@ -25,7 +25,7 @@ import pl.rynski.usermanagement.security.JwtTokenGenerator;
 import pl.rynski.usermanagement.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 	
@@ -34,10 +34,11 @@ public class UserController {
 	private final CustomUserDetailsService customUserDetailsService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<?> login(@RequestBody final LoginRequest loginRequest) {
 		return ResponseEntity.ok().build();
 	}
 
+	//TODO Do refaktoru
 	@PostMapping("/token/refresh")
 	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
 		String authorizationHeader = request.getHeader("Authorization");
@@ -75,7 +76,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest userRequest) {
+	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody final CreateUserRequest userRequest) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequest));
 	}
 }

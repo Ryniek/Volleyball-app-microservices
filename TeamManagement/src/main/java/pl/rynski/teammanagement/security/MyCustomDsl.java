@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 
 public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 	
-	private Environment environment;
+	private final Environment environment;
 	
 	public MyCustomDsl(Environment environment) {
 		this.environment = environment;
