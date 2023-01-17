@@ -1,4 +1,4 @@
-package pl.rynski.usermanagement.exception;
+package pl.rynski.playerstatistics.exception;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.toList();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorMessage(exception, validationErrors));
 	}
-
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -44,5 +44,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.toList();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorMessage(exception, validationErrors));
 	}
-
 }

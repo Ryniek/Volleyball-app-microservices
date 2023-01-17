@@ -1,4 +1,4 @@
-package pl.rynski.usermanagement.exception;
+package pl.rynski.teammanagement.exception;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<CustomErrorMessage> handleResourceNotFoundException(ResourceNotFoundException exception) {
+	public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorMessage(exception));
 	}
 	
@@ -32,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.toList();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorMessage(exception, validationErrors));
 	}
-
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -44,5 +44,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.toList();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorMessage(exception, validationErrors));
 	}
-
 }

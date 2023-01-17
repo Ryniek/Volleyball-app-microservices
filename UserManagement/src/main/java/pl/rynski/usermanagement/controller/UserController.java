@@ -28,6 +28,7 @@ import pl.rynski.usermanagement.service.UserService;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+	
 	private final UserService userService;
 	private final Environment environment;
 	private final CustomUserDetailsService customUserDetailsService;
@@ -59,10 +60,9 @@ public class UserController {
 	@Secured("ROLE_ADMIN")
 	@GetMapping("/test2")
 	public ResponseEntity<?> test2(HttpServletRequest request) {
-		System.out.println(environment.getProperty("jwt.token.secret"));
-		System.out.println(request.getHeader("Authorization"));
-		System.out.println(customUserDetailsService.getLoggedUser().getEmail());
-		return ResponseEntity.ok().build();
+		throw new IllegalArgumentException();
+
+		//return ResponseEntity.ok().build();
 	}
 
 	@Secured("ROLE_USER")
@@ -75,7 +75,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<UserResponse> createUser(@RequestBody @Valid CreateUserRequest userRequest) {
+	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest userRequest) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequest));
 	}
 }
