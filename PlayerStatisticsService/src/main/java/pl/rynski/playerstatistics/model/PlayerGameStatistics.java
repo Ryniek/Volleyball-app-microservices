@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerGameStatistics {
+	
 	private Long gameId;
 	private Integer attacksFinished;
 	private Integer attacksBlocked;

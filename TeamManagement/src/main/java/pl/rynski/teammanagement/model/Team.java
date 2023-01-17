@@ -36,7 +36,8 @@ public class Team {
 	//TODO Logo druzyny
 	
 	//TODO many to many adminow druzyny(druzyna moze miec wiele adminow a user moze byc adminem w wielu druzynach)
-	
+	@OneToMany(mappedBy = "team")
+	private List<TeamAdmin> admins;
 	//TODO jakies many to many z uzytkownikami przypisanymi do druzyny + nazwa z imienia i nazwiska
 	@OneToMany(mappedBy = "team")
 	private List<TeamPlayer> players;

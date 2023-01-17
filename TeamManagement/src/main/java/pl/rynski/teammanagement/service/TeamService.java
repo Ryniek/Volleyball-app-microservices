@@ -21,6 +21,7 @@ public class TeamService {
 	private final UserDetailsService userDetailsService;
 	
 	public TeamResponse getTeamById(final Integer id) {
+		
 		return TeamResponse.toResponse(null);
 	}
 
