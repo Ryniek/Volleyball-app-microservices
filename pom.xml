@@ -72,6 +72,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>de.codecentric</groupId>
+			<artifactId>spring-boot-admin-starter-client</artifactId>
+			<version>${spring.boot.dependencies.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -92,5 +97,6 @@
 		<module>TeamManagement</module>
 		<module>GameService</module>
 		<module>PlayerStatisticsService</module>
+		<module>AdminServer</module>
 	</modules>
 </project>
