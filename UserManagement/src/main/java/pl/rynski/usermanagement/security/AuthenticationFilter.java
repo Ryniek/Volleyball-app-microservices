@@ -23,15 +23,15 @@ import pl.rynski.usermanagement.service.UserService;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
-    private AuthenticationManager authenticationManager;
-    private UserService userService;
-    private Environment environment;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final Environment environment;
     
     public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment environment) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.environment = environment;
-        setFilterProcessesUrl("/users/login");
+        setFilterProcessesUrl("/api/v1/users/login");
     }
 
 	@Override
@@ -39,7 +39,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 			throws AuthenticationException {
 
 		try {
-			LoginRequest creds = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+			final LoginRequest creds = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 			return authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
 							creds.email(), 
@@ -57,10 +57,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication auth) throws IOException {
 
-        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-		Algorithm algorithm = Algorithm.HMAC256(environment.getProperty("jwt.token.secret"));
-		Algorithm refreshAlgorithm = Algorithm.HMAC256(environment.getProperty("jwt.refresh.secret"));
-        UserResponse user = userService.getUserDetailsByEmail(principal.getUsername());
+        final UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+		final Algorithm algorithm = Algorithm.HMAC256(environment.getProperty("jwt.token.secret"));
+		final Algorithm refreshAlgorithm = Algorithm.HMAC256(environment.getProperty("jwt.refresh.secret"));
+        final UserResponse user = userService.getUserDetailsByEmail(principal.getUsername());
         res.setContentType("application/json");
         new ObjectMapper().writeValue(
         			res.getOutputStream(), 

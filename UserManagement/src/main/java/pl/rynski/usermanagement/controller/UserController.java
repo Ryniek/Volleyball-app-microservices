@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,19 +26,25 @@ import pl.rynski.usermanagement.security.JwtTokenGenerator;
 import pl.rynski.usermanagement.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 	
 	private final UserService userService;
 	private final Environment environment;
 	private final CustomUserDetailsService customUserDetailsService;
+	
+	@GetMapping("/exists/{userId}")
+	public ResponseEntity<Boolean> checkIfUserExists(@PathVariable final Integer userId) {
+		return ResponseEntity.status(HttpStatus.OK).body(userService.checkIfUserExists(userId));
+	}
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<?> login(@RequestBody final LoginRequest loginRequest) {
 		return ResponseEntity.ok().build();
 	}
 
+	//TODO Do refaktoru
 	@PostMapping("/token/refresh")
 	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
 		String authorizationHeader = request.getHeader("Authorization");
@@ -75,7 +82,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest userRequest) {
+	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody final CreateUserRequest userRequest) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequest));
 	}
 }

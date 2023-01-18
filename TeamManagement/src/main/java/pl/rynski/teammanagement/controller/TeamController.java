@@ -9,20 +9,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import pl.rynski.teammanagement.request.CreateTeamRequest;
+import pl.rynski.teammanagement.response.TeamResponse;
 import pl.rynski.teammanagement.service.TeamService;
 
+@Slf4j
 @RestController
-@RequestMapping("/teams")
-public record TeamController(TeamService teamService) {
+@RequestMapping("/api/v1/teams")
+@RequiredArgsConstructor
+public class TeamController {
+	
+	private final TeamService teamService;
 	
 	@GetMapping("/{teamId}")
-	public ResponseEntity<?> getTeam(@PathVariable Long teamId) {
-		return ResponseEntity.status(HttpStatus.OK).body(null);
+	public ResponseEntity<TeamResponse> getTeamById(@PathVariable final Integer teamId) {
+		return ResponseEntity.status(HttpStatus.OK).body(teamService.getTeamById(teamId));
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createTeam(@RequestBody CreateTeamRequest createTeamRequest) {
+	public ResponseEntity<TeamResponse> createTeam(@RequestBody final CreateTeamRequest createTeamRequest) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest));
+	}
+	
+	//TODO zaprosic tylko tych ktorzy nie sa w teamie, tylko przez creatora/tworce danej druzyny
+	@PostMapping("/{teamId}/invite/{userId}")
+	public ResponseEntity<?> inviteUserToTheTeam(@PathVariable final Integer teamId, @PathVariable final Integer userId) {
+		teamService.inviteUser(teamId, userId);
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

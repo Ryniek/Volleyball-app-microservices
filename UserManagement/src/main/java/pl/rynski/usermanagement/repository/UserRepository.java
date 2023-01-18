@@ -9,5 +9,6 @@ import pl.rynski.usermanagement.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+	//TODO sprawdzic ile zapytan sie wykonuje i jesli wiecej niz jedno to napisac wlasne query
 	Optional<User> findByEmail(String email);
 }
