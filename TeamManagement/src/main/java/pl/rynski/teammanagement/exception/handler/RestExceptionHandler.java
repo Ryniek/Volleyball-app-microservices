@@ -1,4 +1,4 @@
-package pl.rynski.teammanagement.exception;
+package pl.rynski.teammanagement.exception.handler;
 
 import java.util.List;
 
@@ -13,12 +13,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import pl.rynski.teammanagement.exception.ResourceAlreadyExists;
+import pl.rynski.teammanagement.exception.ResourceNotFoundException;
+
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception) {
+	public ResponseEntity<CustomErrorMessage> handleResourceNotFoundException(ResourceNotFoundException exception) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorMessage(exception));
+	}
+	
+	@ExceptionHandler(ResourceAlreadyExists.class)
+	public ResponseEntity<CustomErrorMessage> handleResourceAlreadyExists(ResourceAlreadyExists exception) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(new CustomErrorMessage(exception));
 	}
 	
 	@ExceptionHandler(ConstraintViolationException.class)

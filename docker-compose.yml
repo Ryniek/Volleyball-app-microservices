@@ -10,7 +10,7 @@ services:
       - 3308
     ports: 
       - 3308:3306
-    restart: unless-stopped
+    restart: "no"
   mongo:
     container_name: mongo
     image: mongo
@@ -23,7 +23,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-    restart: unless-stopped
+    restart: "no"
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin

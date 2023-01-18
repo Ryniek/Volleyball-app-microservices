@@ -31,7 +31,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.environment = environment;
-        setFilterProcessesUrl("/users/login");
+        setFilterProcessesUrl("/api/v1/users/login");
     }
 
 	@Override

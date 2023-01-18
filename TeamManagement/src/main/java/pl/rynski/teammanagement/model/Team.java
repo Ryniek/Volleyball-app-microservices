@@ -41,4 +41,6 @@ public class Team {
 	//TODO jakies many to many z uzytkownikami przypisanymi do druzyny + nazwa z imienia i nazwiska
 	@OneToMany(mappedBy = "team")
 	private List<TeamPlayer> players;
+	@OneToMany(mappedBy = "team")
+	private List<TeamInvitation> invitations;
 }

@@ -1,4 +1,4 @@
-package pl.rynski.teammanagement.exception;
+package pl.rynski.teammanagement.exception.handler;
 
 import java.time.LocalDateTime;
 import java.util.List;

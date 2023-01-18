@@ -23,6 +23,10 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final UserRoleRepository userRoleRepository;
 	private final PasswordEncoder passwordEncoder;
+	
+	public Boolean checkIfUserExists(final Integer userId) {
+		return userRepository.existsById(userId);
+	}
 
 	@Transactional
 	public UserResponse createUser(final CreateUserRequest userRequest) {

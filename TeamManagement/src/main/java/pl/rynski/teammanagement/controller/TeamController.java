@@ -32,4 +32,11 @@ public class TeamController {
 	public ResponseEntity<TeamResponse> createTeam(@RequestBody final CreateTeamRequest createTeamRequest) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(teamService.createTeam(createTeamRequest));
 	}
+	
+	//TODO zaprosic tylko tych ktorzy nie sa w teamie, tylko przez creatora/tworce danej druzyny
+	@PostMapping("/{teamId}/invite/{userId}")
+	public ResponseEntity<?> inviteUserToTheTeam(@PathVariable final Integer teamId, @PathVariable final Integer userId) {
+		teamService.inviteUser(teamId, userId);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }
